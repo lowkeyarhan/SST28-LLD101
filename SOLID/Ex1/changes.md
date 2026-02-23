@@ -46,21 +46,6 @@ Now `OnboardingService` is just the orchestrator. It coordinates the flow: parse
 - `IdUtil.java` — unchanged
 - The program output is identical to before
 
-## Output (running `java Main`)
-
-```
-=== Student Onboarding ===
-INPUT: name=Riya;email=riya@sst.edu;phone=9876543210;program=CSE
-OK: created student SST-2026-0001
-Saved. Total students: 1
-CONFIRMATION:
-StudentRecord{id='SST-2026-0001', name='Riya', email='riya@sst.edu', phone='9876543210', program='CSE'}
-
--- DB DUMP --
-| ID             | NAME | PROGRAM |
-| SST-2026-0001   | Riya | CSE     |
-```
-
 ## Takeaways
 
 Each class has one clear job now. Adding a new field (like `city`) means updating the parser and validator — not a giant method with everything mixed together. And I can test each piece in isolation, which is a big win.
