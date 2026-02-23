@@ -2,10 +2,13 @@ import java.util.*;
 
 public class HostelFeeCalculator {
     private final FakeBookingRepo repo;
+    private final PricingRegistry pricingRegistry;
 
-    public HostelFeeCalculator(FakeBookingRepo repo) { this.repo = repo; }
+    public HostelFeeCalculator(FakeBookingRepo repo) {
+        this.repo = repo;
+        this.pricingRegistry = new PricingRegistry();
+    }
 
-    // OCP violation: switch + add-on branching + printing + persistence.
     public void process(BookingRequest req) {
         Money monthly = calculateMonthly(req);
         Money deposit = new Money(5000.00);
@@ -17,21 +20,17 @@ public class HostelFeeCalculator {
     }
 
     private Money calculateMonthly(BookingRequest req) {
-        double base;
-        switch (req.roomType) {
-            case LegacyRoomTypes.SINGLE -> base = 14000.0;
-            case LegacyRoomTypes.DOUBLE -> base = 15000.0;
-            case LegacyRoomTypes.TRIPLE -> base = 12000.0;
-            default -> base = 16000.0;
+        RoomPricing roomPricing = pricingRegistry.getRoomPricing(req.roomType);
+        Money basePrice = roomPricing.getBasePrice();
+
+        Money addOnTotal = new Money(0.0);
+        for (AddOn addOn : req.addOns) {
+            AddOnPricing addOnPricing = pricingRegistry.getAddOnPricing(addOn);
+            if (addOnPricing != null) {
+                addOnTotal = addOnTotal.plus(addOnPricing.getPrice());
+            }
         }
 
-        double add = 0.0;
-        for (AddOn a : req.addOns) {
-            if (a == AddOn.MESS) add += 1000.0;
-            else if (a == AddOn.LAUNDRY) add += 500.0;
-            else if (a == AddOn.GYM) add += 300.0;
-        }
-
-        return new Money(base + add);
+        return basePrice.plus(addOnTotal);
     }
 }
