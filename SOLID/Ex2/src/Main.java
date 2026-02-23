@@ -11,8 +11,7 @@ public class Main {
 
         List<OrderLine> order = List.of(
                 new OrderLine("M1", 2),
-                new OrderLine("C1", 1)
-        );
+                new OrderLine("C1", 1));
 
         sys.checkout("student", order);
     }

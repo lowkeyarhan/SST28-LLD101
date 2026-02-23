@@ -24,6 +24,6 @@ public class CafeteriaSystem {
         printer.print(invoiceContent);
 
         store.save(invId, invoiceContent);
-        System.out.println("Saved invoice: " + invId + " (lines=" + store.countLines(invId) + ")");
+        printer.printSaved(invId, store.countLines(invId));
     }
 }

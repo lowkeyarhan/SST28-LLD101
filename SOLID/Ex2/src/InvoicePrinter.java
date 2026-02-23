@@ -28,4 +28,8 @@ public class InvoicePrinter {
     public void print(String invoiceContent) {
         System.out.print(invoiceContent);
     }
+
+    public void printSaved(String invoiceId, int lineCount) {
+        System.out.println("Saved invoice: " + invoiceId + " (lines=" + lineCount + ")");
+    }
 }
